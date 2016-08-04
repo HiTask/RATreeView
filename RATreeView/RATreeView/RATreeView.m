@@ -603,7 +603,6 @@
     if (childInDataSourceIndex != NSNotFound
         && childInTreeIndex != childInDataSourceIndex) {
       [self moveItemAtIndex:childInTreeIndex inParent:item toIndex:childInDataSourceIndex inParent:item];
-      [self syncChildrenOfItem:childInTree withRowAnimation:animation];
     }
 
     BOOL isExpanded = [self isCellForItemExpanded:childInTree];
