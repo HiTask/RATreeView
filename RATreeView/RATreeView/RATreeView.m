@@ -564,6 +564,81 @@
   [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
 }
 
+- (void)invalidateItem:(id)item withRowAnimation:(RATreeViewRowAnimation)animation
+{
+  [self beginUpdates];
+
+  [self syncChildrenOfItem:item withRowAnimation:animation];
+
+  [self endUpdates];
+}
+
+- (void)syncChildrenOfItem:(id)item withRowAnimation:(RATreeViewRowAnimation)animation
+{
+  NSArray *childrenOfItemInTree = [self childrenOfItemInTree:item];
+  NSArray *childrenOfItemInDataSource = [self childrenOfItemInDataSource:item];
+
+  // add new items
+  for (id childInDataSource in childrenOfItemInDataSource) {
+    if ([childrenOfItemInTree indexOfObject:childInDataSource] == NSNotFound) {
+      NSUInteger childInDataSourceIndex = [childrenOfItemInDataSource indexOfObject:childInDataSource];
+      [self insertItemAtIndex:childInDataSourceIndex inParent:item withAnimation:animation];
+    }
+  }
+
+  // remove obsolete items
+  for (id childInTree in childrenOfItemInTree) {
+    if ([childrenOfItemInDataSource indexOfObject:childInTree] == NSNotFound) {
+      NSUInteger childInTreeIndex = [childrenOfItemInTree indexOfObject:childInTree];
+      [self removeItemAtIndex:childInTreeIndex inParent:item withAnimation:animation];
+    }
+  }
+
+  // fix index of equal items and start recursive sync for them if it is expanded
+  NSUInteger numberOfChildrenInTree = [self.treeNodeCollectionController numberOfChildrenInParent:item];
+  for (NSUInteger childInTreeIndex = 0; childInTreeIndex < numberOfChildrenInTree; childInTreeIndex++) {
+    id childInTree = childrenOfItemInTree[childInTreeIndex];
+    NSUInteger childInDataSourceIndex = [childrenOfItemInDataSource indexOfObject:childInTree];
+
+    if (childInDataSourceIndex != NSNotFound
+        && childInTreeIndex != childInDataSourceIndex) {
+      [self moveItemAtIndex:childInTreeIndex inParent:item toIndex:childInDataSourceIndex inParent:item];
+      [self syncChildrenOfItem:childInTree withRowAnimation:animation];
+    }
+
+    BOOL isExpanded = [self isCellForItemExpanded:childInTree];
+    if (childInDataSourceIndex != NSNotFound
+        && isExpanded) {
+      [self syncChildrenOfItem:childInTree withRowAnimation:animation];
+    }
+  }
+}
+
+- (NSArray *)childrenOfItemInTree:(id)item
+{
+  NSMutableArray *children = [NSMutableArray new];
+  NSUInteger numberOfChildrenInTree = [self.treeNodeCollectionController numberOfChildrenInParent:item];
+
+  for (NSUInteger i = 0; i < numberOfChildrenInTree; i++) {
+    id childItemInTree = [self.treeNodeCollectionController childInParent:item atIndex:i];
+    [children addObject:childItemInTree];
+  }
+
+  return children;
+}
+
+- (NSArray *)childrenOfItemInDataSource:(id)item
+{
+  NSMutableArray *children = [NSMutableArray new];
+  NSUInteger numberOfChildrenInDataSource = [self.dataSource treeView:self numberOfChildrenOfItem:item];
+
+  for (NSUInteger i = 0; i < numberOfChildrenInDataSource; i++) {
+    id childInDataSource = [self.dataSource treeView:self child:i ofItem:item];
+    [children addObject:childInDataSource];
+  }
+
+  return children;
+}
 
 #pragma mark - UIScrollView's properties
 

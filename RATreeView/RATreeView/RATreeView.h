@@ -590,6 +590,14 @@ typedef enum RATreeViewRowAnimation {
 
 - (void)reloadData;
 - (void)reloadRowsForItems:(NSArray *)items withRowAnimation:(RATreeViewRowAnimation)animation;
+
+/**
+ *  Synchronizes children rows in tree view with corresponding items from data source.
+ *
+ *  @param item         An item identifying a row in tree view.
+ */
+- (void)invalidateItem:(id)item withRowAnimation:(RATreeViewRowAnimation)animation;
+
 - (void)reloadRows;
 
 

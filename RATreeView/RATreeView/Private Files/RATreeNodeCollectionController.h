@@ -39,6 +39,7 @@
 - (NSInteger)levelForItem:(id)item;
 - (id)parentForItem:(id)item;
 - (id)childInParent:(id)parent atIndex:(NSInteger)index;
+- (NSUInteger)numberOfChildrenInParent:(id)parent;
 
 - (NSInteger)indexForItem:(id)item;
 - (NSInteger)lastVisibleDescendantIndexForItem:(id)item;

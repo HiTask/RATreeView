@@ -74,6 +74,12 @@
   return controller.treeNode.item;
 }
 
+- (NSUInteger)numberOfChildrenInParent:(id)parent
+{
+  NSUInteger number = [self.rootController controllerForItem:parent].childControllers.count;
+  return number;
+}
+
 - (void)expandRowForItem:(id)item updates:(void (^)(NSIndexSet *))updates
 {
   [self expandRowForItem:item expandChildren:YES updates:updates];
