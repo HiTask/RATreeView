@@ -268,6 +268,14 @@
 
 #pragma mark - Changing tree's structure
 
+- (void)performBatchUpdates:(void (NS_NOESCAPE ^ _Nullable)(void))updates completion:(void (^ _Nullable)(BOOL finished))completion {
+  [self.tableView performBatchUpdates:^{
+      if (updates != nil) {
+        updates();
+      }
+  } completion:nil];
+}
+
 - (void)beginUpdates
 {
   [self.tableView beginUpdates];

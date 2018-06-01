@@ -492,6 +492,7 @@ typedef enum RATreeViewRowAnimation {
 /// @name Inserting, Deleting, and Moving Rows
 ///------------------------------------------------
 
+- (void)performBatchUpdates:(void (NS_NOESCAPE ^ _Nullable)(void))updates completion:(void (^ _Nullable)(BOOL finished))completion API_AVAILABLE(ios(11.0), tvos(11.0));;
 - (void)beginUpdates;
 - (void)endUpdates;
 - (void)insertItemsAtIndexes:(NSIndexSet *)indexes inParent:(nullable id)parent withAnimation:(RATreeViewRowAnimation)animation;
