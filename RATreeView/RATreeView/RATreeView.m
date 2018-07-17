@@ -276,7 +276,17 @@
 			updates();
 		}
 	} completion:^(BOOL finished) {
-		[self.batchChanges endUpdates];
+		@try {
+			[self.batchChanges endUpdates];
+		}
+		@catch (NSException *exception) {
+			NSLog(@"Exception during performBatchUpdates: %@", exception);
+			if (completion != nil) {
+				completion(NO);
+			}
+			return;
+		}
+		
 		if (completion != nil) {
 			completion(finished);
 		}
