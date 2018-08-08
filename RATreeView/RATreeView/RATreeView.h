@@ -93,7 +93,14 @@ typedef enum RATreeViewRowAnimation {
  */
 - (id)treeView:(RATreeView *)treeView child:(NSInteger)index ofItem:(nullable id)item;
 
+
 @optional
+
+
+- (nullable UISwipeActionsConfiguration *)treeView:(RATreeView *)treeView leadingSwipeActionsConfigurationFor:(nonnull id)item API_AVAILABLE(ios(11.0));
+
+- (nullable UISwipeActionsConfiguration *)treeView:(RATreeView *)treeView trailingSwipeActionsConfigurationFor:(nonnull id)item API_AVAILABLE(ios(11.0));
+
 
 ///------------------------------------------------
 /// Inserting or Deleting Tree Rows

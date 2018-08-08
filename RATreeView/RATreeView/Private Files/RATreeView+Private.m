@@ -65,7 +65,6 @@
   return [NSIndexPath indexPathForRow:[self.treeNodeCollectionController indexForItem:item] inSection:0];
 }
 
-
 #pragma mark Collapsing and Expanding Rows
 
 - (void)collapseCellForTreeNode:(RATreeNode *)treeNode

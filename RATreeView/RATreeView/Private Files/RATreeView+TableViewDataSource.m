@@ -47,6 +47,26 @@
   return [self.dataSource treeView:self cellForItem:treeNode.item];
 }
 
+- (nullable UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) {
+  if (![self.dataSource respondsToSelector:@selector(treeView:leadingSwipeActionsConfigurationFor:)]) {
+    return nil;
+  }
+
+  RATreeNode *treeNode = [self treeNodeForIndexPath:indexPath];
+  UISwipeActionsConfiguration *configuration = [self.dataSource treeView:self leadingSwipeActionsConfigurationFor:treeNode.item];
+  return configuration;
+}
+
+- (nullable UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0)) {
+  if (![self.dataSource respondsToSelector:@selector(treeView:trailingSwipeActionsConfigurationFor:)]) {
+    return nil;
+  }
+
+  RATreeNode *treeNode = [self treeNodeForIndexPath:indexPath];
+  UISwipeActionsConfiguration *configuration = [self.dataSource treeView:self trailingSwipeActionsConfigurationFor:treeNode.item];
+  return configuration;
+}
+
 
 #pragma mark - Inserting or Deleting Table Rows
 
