@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.screenshots  = "https://raw.github.com/Augustyniak/RATreeView/master/Screens/animation.gif"
   s.license      = {:type => 'MIT', :file => 'LICENCE.md'}
   s.author       = {'Rafal Augustyniak' => 'rafalaugustyniak@gmail.com'} 
-  s.source       = {:git => 'https://github.com/Augustyniak/RATreeView.git', :tag => '2.1.1' }
+  s.source       = {:git => 'https://github.com/HiTask/RATreeView.git', :tag => '2.1.1' }
   s.platform     = :ios, '5.0'
   s.source_files = 'RATreeView/RATreeView/**/*.{h,m}'
   s.public_header_files = 'RATreeView/RATreeView/RATreeView.h'
