@@ -268,7 +268,7 @@
 
 #pragma mark - Changing tree's structure
 
-- (void)performBatchUpdates:(void (NS_NOESCAPE ^ _Nullable)(void))updates completion:(void (^ _Nullable)(BOOL finished))completion {
+- (void)performBatchUpdates:(void (NS_NOESCAPE ^ _Nullable)(void))updates completion:(void (^ _Nullable)(BOOL finished, BOOL failed))completion {
 	[self.batchChanges beginUpdates];
 	
 	[self.tableView performBatchUpdates:^{
@@ -282,13 +282,13 @@
 		@catch (NSException *exception) {
 			NSLog(@"Exception during performBatchUpdates: %@", exception);
 			if (completion != nil) {
-				completion(NO);
+				completion(NO, YES);
 			}
 			return;
 		}
 		
 		if (completion != nil) {
-			completion(finished);
+			completion(finished, NO);
 		}
 	}];
 }
