@@ -269,28 +269,46 @@
 #pragma mark - Changing tree's structure
 
 - (void)performBatchUpdates:(void (NS_NOESCAPE ^ _Nullable)(void))updates completion:(void (^ _Nullable)(BOOL finished, BOOL failed))completion {
-	[self.batchChanges beginUpdates];
-	
-	[self.tableView performBatchUpdates:^{
-		if (updates != nil) {
-			updates();
-		}
-	} completion:^(BOOL finished) {
-		@try {
-			[self.batchChanges endUpdates];
-		}
-		@catch (NSException *exception) {
-			NSLog(@"Exception during performBatchUpdates: %@", exception);
-			if (completion != nil) {
-				completion(NO, YES);
-			}
-			return;
-		}
-		
+	@try {
+		[self.batchChanges beginUpdates];
+	}
+	@catch (NSException *exception) {
+		NSLog(@"Exception during batchChanges beginUpdates: %@", exception);
 		if (completion != nil) {
-			completion(finished, NO);
+			completion(NO, YES);
 		}
-	}];
+		return;
+	}
+	
+	@try {
+		[self.tableView performBatchUpdates:^{
+			if (updates != nil) {
+				updates();
+			}
+		} completion:^(BOOL finished) {
+			@try {
+				[self.batchChanges endUpdates];
+			}
+			@catch (NSException *exception) {
+				NSLog(@"Exception during performBatchUpdates: %@", exception);
+				if (completion != nil) {
+					completion(NO, YES);
+				}
+				return;
+			}
+			
+			if (completion != nil) {
+				completion(finished, NO);
+			}
+		}];
+	}
+	@catch (NSException *exception) {
+		NSLog(@"Exception during tableView performBatchUpdates: %@", exception);
+		if (completion != nil) {
+			completion(NO, YES);
+		}
+		return;
+	}
 }
 
 - (void)beginUpdates
